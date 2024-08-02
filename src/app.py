@@ -15,12 +15,12 @@ extension = 20
 
 app_ui = ui.page_fluid(
     ui.panel_title(ui.HTML('<div style="text-align: center; font-size: 30px;">'
-                           '<span style="color: #4C84F3;">G</span>'
-                           '<span style="color: #AF6A41;">r</span>'
-                           '<span style="color: #EAC30B;">U</span>'
-                           '<span style="color: #4C84F3;">p</span>'
+                           '<span style="color: #7570B3;">G</span>'
+                           '<span style="color: #D95F02;">r</span>'
+                           '<span style="color: #EFCA08;">U</span>'
+                           '<span style="color: #7570B3;">p</span>'
                            '<span style="color: #7A9A4E;">S</span>'
-                           '<span style="color: #AF6A41;">e</span>'
+                           '<span style="color: #D95F02;">e</span>'
                            '</div>')),
     ui.layout_sidebar(
         ui.panel_sidebar(
@@ -210,7 +210,7 @@ def server(input, output, session):
     @reactive.Calc
     def conversion_factor():
         if convert_rate():
-            return 1 / (input.dry_mass_per_cell() * 1e-3)
+            return (1e3) / (input.dry_mass_per_cell() )
         else:
             return 1
     
@@ -286,7 +286,7 @@ def server(input, output, session):
 
         dynamic_outputs = []
 
-        fitting_colors = ['#7570B3', '#EFCA08', '#90D7FF', '#F49FBC', '#66002C', '#E39EC1']
+        fitting_colors = ['#7570B3', '#90D7FF', '#66002C', '#F49FBC', '#EFCA08', '#E39EC1']
         color_cycle = itertools.cycle(fitting_colors)
 
         for column in selected_columns:
@@ -340,8 +340,8 @@ def server(input, output, session):
                 ax.plot(x_fit, growth_func(x_fit, *popt, params.a0, params.b, k=k_value, A=A, B=B, q_g=q_g, P_0g=P_0g), label=f'fit {column}', color='#D95F02')
                 
                 # Apply conversion factor only for display
-                q = popt[0] / conversion_factor()
-                q_ci = confidence_intervals[0] / conversion_factor()
+                q = popt[0] * conversion_factor()
+                q_ci = confidence_intervals[0] * conversion_factor()
                 P_0 = popt[1]
                 P_0_ci = confidence_intervals[1]
                 
@@ -355,7 +355,7 @@ def server(input, output, session):
                 if fit_glutamine() and column == glutamine_column():
                     I, N = popt[0], P_0
                 
-                q_unit = "mmol·gDW⁻¹h⁻¹" if convert_rate() else "mmol·10⁶cells⁻¹·h⁻¹"
+                q_unit = "mmol·gDW⁻¹h⁻¹" if convert_rate() else "mmol·10⁹cells⁻¹·h⁻¹"
                 dynamic_outputs.append(
                     f"\n{column}: Optimal parameter values ± error\n"
                     f"q   = {q:.9f} ± {q_ci:.9f} {q_unit}\n"
