@@ -69,7 +69,8 @@ def server(input, output, session):
     @reactive.Effect
     def cell_growth_general_properties():
         csv_df = raw_cell_growth_df()
-        lower_bound, upper_bound = input.lwr_bound(), input.upr_bound()
+        lower_bound = input.lwr_bound() if input.lwr_bound() else 0
+        upper_bound = input.upr_bound() if input.upr_bound() else 1
         p0 = (0.1, 0.12)
 
         general_cell_growth_data.set(GeneralCellGrowthData(
