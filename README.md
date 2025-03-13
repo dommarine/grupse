@@ -21,3 +21,7 @@ After that run the following command in the `/src` directory to start the Shiny 
 ```bash
 shiny run
 ```
+
+## Screenshot of the Application
+
+![App with Test Data](./docs/example_screen.png)
